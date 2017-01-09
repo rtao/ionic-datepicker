@@ -15,7 +15,8 @@ angular.module('ionic-datepicker.provider', [])
       templateType: 'popup',
       showTodayButton: false,
       closeOnSelect: false,
-      disableWeekdays: []
+      disableWeekdays: [],
+      sundayIsHoliday: true,
     };
 
     this.configDatePicker = function (inputObj) {
@@ -132,11 +133,14 @@ angular.module('ionic-datepicker.provider', [])
         $scope.lastDayEpoch = resetHMSM(new Date(currentDate.getFullYear(), currentDate.getMonth(), lastDay)).getTime();
 
         for (var i = firstDay; i <= lastDay; i++) {
+          isHoliday = false;
           tempDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
           disabled = (tempDate.getTime() < $scope.fromDate) || (tempDate.getTime() > $scope.toDate) || $scope.mainObj.disableWeekdays.indexOf(tempDate.getDay()) >= 0;
 
-          if (config.holidaysList.length > 0) {
-            isHoliday = (config.holidaysList.indexOf(tempDate) > 0);
+          if ($scope.mainObj.showHoliday && $scope.mainObj.holidaysList.length > 0) {
+            isHoliday = $scope.mainObj.holidaysList.some(function (holiday) {
+              return holiday.getTime() === tempDate.getTime();
+            }) || ($scope.mainObj.sundayIsHoliday && tempDate.getDay() === 0);
           }
 
           $scope.dayList.push({
@@ -149,7 +153,7 @@ angular.module('ionic-datepicker.provider', [])
             isHoliday: isHoliday,
           });
         }
-
+        
         //To set Monday as the first day of the week.
         var firstDayMonday = $scope.dayList[0].day - $scope.mainObj.mondayFirst;
         firstDayMonday = (firstDayMonday < 0) ? 6 : firstDayMonday;
