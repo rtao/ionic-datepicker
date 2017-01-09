@@ -11,6 +11,7 @@ angular.module('ionic-datepicker.provider', [])
       mondayFirst: true,
       weeksList: ["S", "M", "T", "W", "T", "F", "S"],
       monthsList: ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],
+      holidaysList: [],
       templateType: 'popup',
       showTodayButton: false,
       closeOnSelect: false,
@@ -126,7 +127,7 @@ angular.module('ionic-datepicker.provider', [])
 
         $scope.dayList = [];
 
-        var tempDate, disabled;
+        var tempDate, disabled, isHoliday;
         $scope.firstDayEpoch = resetHMSM(new Date(currentDate.getFullYear(), currentDate.getMonth(), firstDay)).getTime();
         $scope.lastDayEpoch = resetHMSM(new Date(currentDate.getFullYear(), currentDate.getMonth(), lastDay)).getTime();
 
@@ -134,13 +135,18 @@ angular.module('ionic-datepicker.provider', [])
           tempDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
           disabled = (tempDate.getTime() < $scope.fromDate) || (tempDate.getTime() > $scope.toDate) || $scope.mainObj.disableWeekdays.indexOf(tempDate.getDay()) >= 0;
 
+          if (config.holidaysList.length > 0) {
+            isHoliday = (config.holidaysList.indexOf(tempDate) > 0);
+          }
+
           $scope.dayList.push({
             date: tempDate.getDate(),
             month: tempDate.getMonth(),
             year: tempDate.getFullYear(),
             day: tempDate.getDay(),
             epoch: tempDate.getTime(),
-            disabled: disabled
+            disabled: disabled,
+            isHoliday: isHoliday,
           });
         }
 

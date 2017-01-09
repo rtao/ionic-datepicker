@@ -49,6 +49,13 @@
   font-weight: bold;
 }
 
+.ionic_datepicker_popup .holiday {
+  background-color: $date-picker-holiday;
+  border-radius: 50%;
+  color: $date-picker-light;
+  font-weight: bold;
+}
+
 .ionic_datepicker_popup .popup-head {
   background-color: $date-picker-positive;
   display: none;
@@ -168,6 +175,12 @@
 
 .ionic_datepicker_modal .selected_date {
   background-color: $date-picker-positive;
+  color: $date-picker-light;
+  font-weight: bold;
+}
+
+.ionic_datepicker_modal .holiday {
+  background-color: $date-picker-holiday;
   color: $date-picker-light;
   font-weight: bold;
 }
